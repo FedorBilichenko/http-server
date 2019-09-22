@@ -11,7 +11,7 @@ DEFAULT_PATH = './default.conf'
 
 class Config:
     __slots__ = [
-        'cpu_limit',
+        'cpu_count',
         'host',
         'port',
         'document_root',
@@ -20,7 +20,7 @@ class Config:
     ]
 
     def __init__(self):
-        self.cpu_limit = DEFAULT_CPU_LIMIT
+        self.cpu_count = DEFAULT_CPU_LIMIT
         self.host = DEFAULT_HOST
         self.port = DEFAULT_PORT
         self.document_root = DEFAULT_DOCUMENT_ROOT
@@ -39,7 +39,7 @@ class Config:
             for line in file.read().splitlines():
                 key, value = line.split(' ')
                 if hasattr(self, key):
-                    if key in ['cpu_limit', 'port', 'queue_size']:
+                    if key in ['cpu_count', 'port', 'queue_size']:
                         parsed = int(value, 10)
                         setattr(self, key, parsed)
                     else:
