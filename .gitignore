@@ -1,2 +1,4 @@
 /venv
 .idea/
+/http-test-suite
+/src/__pycache__/
