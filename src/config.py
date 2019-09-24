@@ -6,7 +6,7 @@ DEFAULT_PORT = '80'
 DEFAULT_DOCUMENT_ROOT = '/var/www/html'
 DEFAULT_QUEUE_SIZE = 1
 
-DEFAULT_PATH = './default.conf'
+DEFAULT_PATH = './default.local.conf'
 
 
 class Config:
