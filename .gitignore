@@ -2,3 +2,4 @@
 .idea/
 /http-test-suite
 /src/__pycache__/
+/env

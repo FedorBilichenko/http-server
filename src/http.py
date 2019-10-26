@@ -51,8 +51,10 @@ class HTTPRequester:
         self._parse()
 
     def _parse(self):
-        [request_line, content] = self.data.split('\r\n', maxsplit=1)
-        [headers, self.body] = content.split('\r\n\r\n')
+
+        [header, *self.body] = self.data.split('\r\n\r\n')
+
+        [request_line, *headers] = header.split('\r\n')
 
         [self.method, self.url, self.protocol] = request_line.split(' ')
 
@@ -67,7 +69,7 @@ class HTTPRequester:
 
         self.protocol = self.protocol.replace('HTTP/', '')
 
-        for header in headers.split('\r\n'):
+        for header in headers:
             [key, value] = header.split(': ')
             self.headers[key] = value
 
@@ -114,7 +116,6 @@ class HttpHandler:
         request = HTTPRequester(data)
 
         if not request.is_method_allowed:
-            print('HERE')
             return HTTPResponser(ResponseCode.NOT_ALLOWED, request.protocol).build()
 
         self.protocol = request.protocol
@@ -122,7 +123,6 @@ class HttpHandler:
             file_url = request.url[1:] + DEFAULT_FILE
         else:
             file_url = request.url[1:]
-        print('file_url', file_url)
         if file_url.find('../') >= 0:
             self.response = HTTPResponser(ResponseCode.FORBIDDEN, request.protocol)
         else:
@@ -131,18 +131,15 @@ class HttpHandler:
                 # flag = fcntl.fcntl(self.file, fcntl.F_GETFL)
                 # fcntl.fcntl(self.file, fcntl.F_SETFL, flag | os.O_NONBLOCK)
             except (FileNotFoundError, IsADirectoryError):
-                print('kek1')
                 if (request.url[-1:]) == '/':
                     return HTTPResponser(ResponseCode.FORBIDDEN, request.protocol).build()
                 else:
                     return HTTPResponser(ResponseCode.NOT_FOUND, request.protocol).build()
             except OSError:
-                print('kek2')
                 return HTTPResponser(ResponseCode.NOT_FOUND, request.protocol).build()
             try:
                 self.content_type = ContentTypes[file_url.split('.')[-1]].value
             except KeyError:
-                print('kek3')
                 self.content_type = DEFAULT_CONTENT_TYPE
 
             self.content_length = os.path.getsize(os.path.join(document_root, file_url))
@@ -150,5 +147,4 @@ class HttpHandler:
 
             if request.method == 'HEAD':
                 self.file = None
-        print(self.response.build())
         return self.response.build()
