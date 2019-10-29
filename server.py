@@ -18,7 +18,7 @@ def main():
 
     selector = Selector(sock)
 
-    for i in range(config.cpu_count - 1):
+    for i in range(config.cpu_limit - 1):
         pid = os.fork()
         if pid == 0:
             break

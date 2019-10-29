@@ -2,7 +2,7 @@ from pathlib import Path
 
 DEFAULT_CPU_LIMIT = 4
 DEFAULT_HOST = '0.0.0.0'
-DEFAULT_PORT = '80'
+DEFAULT_PORT = 80
 DEFAULT_DOCUMENT_ROOT = '/var/www/html'
 DEFAULT_QUEUE_SIZE = 1
 
@@ -11,7 +11,7 @@ DEFAULT_PATH = './default.local.conf'
 
 class Config:
     __slots__ = [
-        'cpu_count',
+        'cpu_limit',
         'host',
         'port',
         'document_root',
@@ -20,7 +20,7 @@ class Config:
     ]
 
     def __init__(self):
-        self.cpu_count = DEFAULT_CPU_LIMIT
+        self.cpu_limit = DEFAULT_CPU_LIMIT
         self.host = DEFAULT_HOST
         self.port = DEFAULT_PORT
         self.document_root = DEFAULT_DOCUMENT_ROOT
@@ -39,7 +39,7 @@ class Config:
             for line in file.read().splitlines():
                 key, value = line.split(' ')
                 if hasattr(self, key):
-                    if key in ['cpu_count', 'port', 'queue_size']:
+                    if key in ['cpu_limit']:
                         parsed = int(value, 10)
                         setattr(self, key, parsed)
                     else:
