@@ -33,7 +33,7 @@ class FileHandler(Handler):
 
 
 class ConnectionHandler(Handler):
-    def __init__(self, connection, document_root='./http-test-suite'):
+    def __init__(self, connection, document_root='/var/www/html'):
         super().__init__()
         self.connection = connection
         self.data = b''
